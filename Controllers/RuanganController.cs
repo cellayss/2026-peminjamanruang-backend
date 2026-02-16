@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
-using Backend.Data;
-using Backend.Models;
 using Backend.DTO;
+using Backend.Models;
+using Backend.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
 
@@ -9,33 +9,30 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 public class RuanganController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly RuanganService _service;
 
-    public RuanganController(AppDbContext context)
+    public RuanganController(RuanganService service)
     {
-        _context = context;
+        _service = service;
     }
 
-    // READ ALL
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(_context.Ruang.ToList());
+        return Ok(await _service.GetAll());
     }
 
-    // READ BY ID
     [HttpGet("{id}")]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var ruang = _context.Ruang.Find(id);
-        if (ruang == null) return NotFound();
+        var data = await _service.GetById(id);
+        if (data == null) return NotFound();
 
-        return Ok(ruang);
+        return Ok(data);
     }
 
-    // CREATE
     [HttpPost]
-    public IActionResult Create(RuangCreateDto dto)
+    public async Task<IActionResult> Create(RuangCreateDto dto)
     {
         var ruang = new Ruang
         {
@@ -43,36 +40,29 @@ public class RuanganController : ControllerBase
             Capacity = dto.Capacity
         };
 
-        _context.Ruang.Add(ruang);
-        _context.SaveChanges();
-
-        return Ok(ruang);
+        return Ok(await _service.Create(ruang));
     }
 
-    // UPDATE
     [HttpPut("{id}")]
-    public IActionResult Update(int id, RuangCreateDto dto)
+    public async Task<IActionResult> Update(int id, RuangCreateDto dto)
     {
-        var ruang = _context.Ruang.Find(id);
-        if (ruang == null) return NotFound();
+        var ruang = new Ruang
+        {
+            Name = dto.Name,
+            Capacity = dto.Capacity
+        };
 
-        ruang.Name = dto.Name;
-        ruang.Capacity = dto.Capacity;
+        var result = await _service.Update(id, ruang);
+        if (result == null) return NotFound();
 
-        _context.SaveChanges();
-
-        return Ok(ruang);
+        return Ok(result);
     }
 
-    // DELETE
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var ruang = _context.Ruang.Find(id);
-        if (ruang == null) return NotFound();
-
-        _context.Ruang.Remove(ruang);
-        _context.SaveChanges();
+        var success = await _service.Delete(id);
+        if (!success) return NotFound();
 
         return Ok("Deleted");
     }
