@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace _2026_peminjamanruang_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class SeedRuangan : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +18,7 @@ namespace _2026_peminjamanruang_backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Ruangan",
+                name: "Ruang",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -27,12 +29,12 @@ namespace _2026_peminjamanruang_backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ruangan", x => x.Id);
+                    table.PrimaryKey("PK_Ruang", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Peminjamans",
+                name: "Peminjaman",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -47,19 +49,31 @@ namespace _2026_peminjamanruang_backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Peminjamans", x => x.Id);
+                    table.PrimaryKey("PK_Peminjaman", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Peminjamans_Ruangan_RuangId",
+                        name: "FK_Peminjaman_Ruang_RuangId",
                         column: x => x.RuangId,
-                        principalTable: "Ruangan",
+                        principalTable: "Ruang",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.InsertData(
+                table: "Ruang",
+                columns: new[] { "Id", "Capacity", "Name" },
+                values: new object[,]
+                {
+                    { 1, 120, "D3 Teather" },
+                    { 2, 500, "Auditorium Pasca Lt.6" },
+                    { 3, 30, "Ruang Rapat Pasca Lt.1" },
+                    { 4, 120, "Mini Teather Pasca Lt.6" },
+                    { 5, 300, "Hall D4" }
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Peminjamans_RuangId",
-                table: "Peminjamans",
+                name: "IX_Peminjaman_RuangId",
+                table: "Peminjaman",
                 column: "RuangId");
         }
 
@@ -67,10 +81,10 @@ namespace _2026_peminjamanruang_backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Peminjamans");
+                name: "Peminjaman");
 
             migrationBuilder.DropTable(
-                name: "Ruangan");
+                name: "Ruang");
         }
     }
 }

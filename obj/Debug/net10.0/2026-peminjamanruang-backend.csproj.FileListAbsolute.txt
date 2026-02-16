@@ -122,3 +122,4 @@
 /Users/ashlihatulsotya/Documents/Peminjaman Ruang Kampus/2026-peminjamanruang-backend/bin/Debug/net10.0/tr/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 /Users/ashlihatulsotya/Documents/Peminjaman Ruang Kampus/2026-peminjamanruang-backend/bin/Debug/net10.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 /Users/ashlihatulsotya/Documents/Peminjaman Ruang Kampus/2026-peminjamanruang-backend/bin/Debug/net10.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+/Users/ashlihatulsotya/Documents/Peminjaman Ruang Kampus/2026-peminjamanruang-backend/obj/Debug/net10.0/2026-peminjamanruang-backend.sourcelink.json

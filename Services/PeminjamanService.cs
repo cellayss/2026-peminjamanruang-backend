@@ -15,18 +15,18 @@ public class PeminjamanService
 
     public async Task<List<Peminjaman>> GetAll()
     {
-        return await _context.Peminjamans.Include(b => b.Ruang).ToListAsync();
+        return await _context.Peminjaman.Include(b => b.Ruang).ToListAsync();
     }
 
     public async Task<Peminjaman?> GetById(int id)
     {
-        return await _context.Peminjamans.Include(b => b.Ruang)
+        return await _context.Peminjaman.Include(b => b.Ruang)
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Peminjaman> Create(Peminjaman peminjaman)
     {
-        _context.Peminjamans.Add(peminjaman);
+        _context.Peminjaman.Add(peminjaman);
         await _context.SaveChangesAsync();
         return peminjaman;
     }

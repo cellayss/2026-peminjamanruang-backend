@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _2026_peminjamanruang_backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260213125652_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260216074612_SeedRuangan")]
+    partial class SeedRuangan
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,7 +54,7 @@ namespace _2026_peminjamanruang_backend.Migrations
 
                     b.HasIndex("RuangId");
 
-                    b.ToTable("Peminjamans");
+                    b.ToTable("Peminjaman");
                 });
 
             modelBuilder.Entity("Backend.Models.Ruang", b =>
@@ -74,7 +74,39 @@ namespace _2026_peminjamanruang_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ruangan");
+                    b.ToTable("Ruang");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Capacity = 120,
+                            Name = "D3 Teather"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Capacity = 500,
+                            Name = "Auditorium Pasca Lt.6"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Capacity = 30,
+                            Name = "Ruang Rapat Pasca Lt.1"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Capacity = 120,
+                            Name = "Mini Teather Pasca Lt.6"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Capacity = 300,
+                            Name = "Hall D4"
+                        });
                 });
 
             modelBuilder.Entity("Backend.Models.Peminjaman", b =>
