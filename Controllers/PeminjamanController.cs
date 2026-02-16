@@ -1,8 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Backend.Data;
-using Backend.Models;
 using Backend.DTO;
+using Backend.Models;
+using Backend.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
 
@@ -10,77 +9,61 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 public class PeminjamanController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly PeminjamanService _service;
 
-    public PeminjamanController(AppDbContext context)
+    public PeminjamanController(PeminjamanService service)
     {
-        _context = context;
+        _service = service;
     }
 
-    // READ ALL
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(_context.Peminjaman.Include(x => x.Ruang).ToList());
+        return Ok(await _service.GetAll());
     }
 
-    // READ BY ID
     [HttpGet("{id}")]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var data = _context.Peminjaman
-            .Include(x => x.Ruang)
-            .FirstOrDefault(x => x.Id == id);
-
+        var data = await _service.GetById(id);
         if (data == null) return NotFound();
 
         return Ok(data);
     }
 
-    // CREATE
     [HttpPost]
-    public IActionResult Create(PeminjamanCreateDto dto)
+    public async Task<IActionResult> Create(PeminjamanCreateDto dto)
     {
-        var ruang = _context.Ruang.Find(dto.RuangId);
-        if (ruang == null) return BadRequest("Ruang tidak ditemukan");
-
         var peminjaman = new Peminjaman
         {
             BorrowerName = dto.BorrowerName,
             StartTime = dto.StartTime,
             EndTime = dto.EndTime,
-            Status = PeminjamanStatus.Pending,
             RuangId = dto.RuangId
         };
 
-        _context.Peminjaman.Add(peminjaman);
-        _context.SaveChanges();
+        var result = await _service.Create(peminjaman);
 
-        return Ok(peminjaman);
+        if (result == null)
+            return BadRequest("Ruang tidak ditemukan");
+
+        return Ok(result);
     }
 
-    // UPDATE STATUS
-    [HttpPut("{id}")]
-    public IActionResult UpdateStatus(int id, PeminjamanStatus status)
+    [HttpPut("{id}/status")]
+    public async Task<IActionResult> UpdateStatus(int id, PeminjamanStatus status)
     {
-        var data = _context.Peminjaman.Find(id);
+        var data = await _service.UpdateStatus(id, status);
         if (data == null) return NotFound();
-
-        data.Status = status;
-        _context.SaveChanges();
 
         return Ok(data);
     }
 
-    // DELETE
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var data = _context.Peminjaman.Find(id);
-        if (data == null) return NotFound();
-
-        _context.Peminjaman.Remove(data);
-        _context.SaveChanges();
+        var success = await _service.Delete(id);
+        if (!success) return NotFound();
 
         return Ok("Deleted");
     }
