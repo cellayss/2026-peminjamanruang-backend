@@ -40,6 +40,21 @@ public class PeminjamanService
         return peminjaman;
     }
 
+   public async Task<Peminjaman?> Update(int id, Peminjaman updatedData)
+    {
+    var existing = await _context.Peminjaman.FindAsync(id);
+    if (existing == null) return null;
+
+    existing.BorrowerName = updatedData.BorrowerName;
+    existing.RuangId = updatedData.RuangId;
+    existing.StartTime = updatedData.StartTime;
+    existing.EndTime = updatedData.EndTime;
+
+    await _context.SaveChangesAsync();
+
+    return existing;
+    }
+
     public async Task<Peminjaman?> UpdateStatus(int id, PeminjamanStatus status)
     {
         var data = await _context.Peminjaman.FindAsync(id);

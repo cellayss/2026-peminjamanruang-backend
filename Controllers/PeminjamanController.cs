@@ -51,13 +51,27 @@ public class PeminjamanController : ControllerBase
     }
 
     [HttpPut("{id}/status")]
-    public async Task<IActionResult> UpdateStatus(int id, PeminjamanStatus status)
+        public async Task<IActionResult> UpdateStatus(
+        int id,
+        [FromBody] UpdateStatusDto dto
+        )
     {
-        var data = await _service.UpdateStatus(id, status);
+
+        var data = await _service.UpdateStatus(id, dto.Status);
         if (data == null) return NotFound();
 
         return Ok(data);
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] Peminjaman dto)
+    {
+    var result = await _service.Update(id, dto);
+    if (result == null) return NotFound();
+
+    return Ok(result);
+    }
+
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)

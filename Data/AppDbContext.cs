@@ -15,6 +15,10 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<Peminjaman>()
+        .Property(p => p.Status)
+        .HasConversion<string>();
+
         modelBuilder.Entity<Ruang>().HasData(
             new Ruang { Id = 1, Name = "D3 Teather", Capacity = 120 },
             new Ruang { Id = 2, Name = "Auditorium Pasca Lt.6", Capacity = 500 },
