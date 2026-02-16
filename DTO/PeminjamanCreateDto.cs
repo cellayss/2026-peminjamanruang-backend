@@ -1,3 +1,5 @@
+namespace Backend.DTO;
+
 public class PeminjamanCreateDto
 {
     public string BorrowerName { get; set; }
