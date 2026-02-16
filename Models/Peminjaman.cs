@@ -1,5 +1,13 @@
 namespace Backend.Models;
 
+public enum PeminjamanStatus
+{
+    Pending,
+    Approved,
+    Rejected,
+    Completed
+}
+
 public class Peminjaman
 {
     public int Id { get; set; }
@@ -7,7 +15,7 @@ public class Peminjaman
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
 
-    public string Status { get; set; } = "Pending";
+    public PeminjamanStatus Status { get; set; } = PeminjamanStatus.Pending;
 
     public int RuangId { get; set; }
     public Ruang? Ruang { get; set; }
